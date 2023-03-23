@@ -1,0 +1,6 @@
+.next
+.yarn
+node_modules
+public
+build
+coverage
