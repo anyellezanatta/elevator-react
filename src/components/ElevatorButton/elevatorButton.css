@@ -1,0 +1,13 @@
+.button {
+  place-items: center;
+  z-index: 1;
+  display: inline-grid;
+  padding: 0 0.5em;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 1px solid;
+  /* border-color: hsl(--clr-dark);
+  background: hsl(--clr-light); */
+  text-decoration: none;
+  cursor: pointer;
+}

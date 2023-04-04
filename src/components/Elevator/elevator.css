@@ -1,0 +1,9 @@
+.flexElevator {
+  display: flex;
+  gap: 0.1rem;
+  flex-direction: column;
+  grid-area: elevator;
+  border: 1px solid;
+  /* border-color: hsl($ {(props) => props.theme.colors.dark}); */
+  padding: 0.25rem;
+}
