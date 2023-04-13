@@ -1,4 +1,4 @@
-import { DependencyList, useEffect, useLayoutEffect, useRef } from "react";
+import { DependencyList, useEffect, useRef } from "react";
 import { useIsomorphicLayoutEffect } from "./useIsomorphicLayoutEffect";
 
 export const useTimeout = (
@@ -7,6 +7,13 @@ export const useTimeout = (
   deps: DependencyList,
 ) => {
   const savedCallback = useRef(callback);
+  const timeoutId = useRef<NodeJS.Timeout | null>(null);
+
+  const stopTimeout = () => {
+    if (timeoutId.current) {
+      clearTimeout(timeoutId.current);
+    }
+  };
 
   // Remember the latest callback if it changes.
   useIsomorphicLayoutEffect(() => {
@@ -21,8 +28,13 @@ export const useTimeout = (
       return;
     }
 
-    const id = setTimeout(() => savedCallback.current(), delay);
+    stopTimeout();
 
-    return () => clearTimeout(id);
+    timeoutId.current = setTimeout(() => savedCallback.current(), delay);
+
+    return stopTimeout;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [delay, deps]);
+
+  return stopTimeout;
 };

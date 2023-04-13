@@ -1,4 +1,4 @@
-import { closest, rangeDown, rangeUp } from "./utils";
+import { closest, range, rangeUp } from "./utils";
 
 type ElevatorConfig = {
   onStep?: (floor: number, stop: boolean) => void;
@@ -78,7 +78,7 @@ export const elevator = ({
         const steps =
           currentDirection === "Up"
             ? rangeUp(nextStop - currentFloor - 1, currentFloor + 1)
-            : rangeDown(currentFloor - nextStop - 1, currentFloor - 1);
+            : range(currentFloor - nextStop - 1, currentFloor - 1);
 
         if (steps.length) {
           currentFloor = steps[0];

@@ -1,4 +1,4 @@
-import "./elevatorButton.css";
+import "./ElevatorButton.css";
 export const ElevatorButton = ({
   floor,
   callFloor,
@@ -7,7 +7,7 @@ export const ElevatorButton = ({
   callFloor: (floor: number) => void;
 }) => {
   return (
-    <button className="button" onClick={() => callFloor(floor)}>
+    <button className="elevator-button" onClick={() => callFloor(floor)}>
       {floor}
     </button>
   );

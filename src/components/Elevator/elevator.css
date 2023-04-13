@@ -1,9 +1,19 @@
-.flexElevator {
-  display: flex;
+.elevator {
+  align-self: end;
   gap: 0.1rem;
   flex-direction: column;
-  grid-area: elevator;
   border: 1px solid;
-  /* border-color: hsl($ {(props) => props.theme.colors.dark}); */
+  border-color: hsl(--clr-dark);
   padding: 0.25rem;
+}
+
+.elevator-button {
+  padding: 0 0.5em;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 1px solid;
+  border-color: hsl(--clr-dark);
+  background: hsl(--clr-light);
+  text-decoration: none;
+  cursor: pointer;
 }

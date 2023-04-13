@@ -1,7 +1,7 @@
 import { MouseEventHandler } from "react";
 import { Elevator } from "../Elevator";
 import { IconButton } from "../IconButton";
-import "./floor.css";
+import "./Floor.css";
 
 export const Floor = ({
   floorNumber,
@@ -9,7 +9,9 @@ export const Floor = ({
   onClickUp,
   onClickDown,
   callFloor,
+  allFloor,
 }: {
+  allFloor: number[];
   floorNumber: number;
   elevator?: boolean;
   onClickUp: MouseEventHandler<HTMLButtonElement>;
@@ -17,14 +19,16 @@ export const Floor = ({
   callFloor: (floor: number) => void;
 }) => {
   return (
-    <div className="floorGrid">
-      <div className="elevatorFlex">
-        <h1>{floorNumber}</h1>
-        {elevator ? <Elevator callFloor={callFloor}></Elevator> : null}
-      </div>
-      <div className="buttons">
+    <div className="flex floor">
+      <div className="flex direction-buttons">
         <IconButton icon="ArrowUp" onClick={onClickUp} />
         <IconButton icon="ArrowDown" onClick={onClickDown} />
+      </div>
+      <div className="flex floor-elevator">
+        <h1>{floorNumber}</h1>
+        {elevator ? (
+          <Elevator allFloor={allFloor} callFloor={callFloor}></Elevator>
+        ) : null}
       </div>
     </div>
   );

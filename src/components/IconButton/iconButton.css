@@ -1,6 +1,15 @@
-.iconButton {
+.icon-button {
   background-color: transparent;
-  background-size: cover;
+  /* background-size: cover; */
   cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border: 0;
+}
+
+.svg-icon {
+  top: 0.125em;
+  flex-shrink: 0;
 }

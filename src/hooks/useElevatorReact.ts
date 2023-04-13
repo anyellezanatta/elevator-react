@@ -1,13 +1,6 @@
-import { closest, rangeDown, rangeUp } from "@/lib/utils";
-import { useEffect, useState } from "react";
+import { range } from "@/lib/utils";
+import { useEffect, useRef, useState } from "react";
 import { useTimeout } from "./useTimeout";
-
-type ElevatorConfig = {
-  onStep?: (floor: number, stop: boolean) => void;
-  stepDelayMs?: number;
-  initialFloor?: number;
-  floorCount?: number;
-};
 
 type Direction = "Up" | "Down";
 
@@ -18,110 +11,108 @@ type ElevatorCall = {
 type ElevatorSteps = {
   floor: number;
   stop: boolean;
+  direction?: Direction;
 };
 
-export const useElevatorReact = (
-  floorCount: number = 6,
-  initialFloor: number = 0,
-) => {
-  const allFloors = rangeDown(floorCount, 5);
-  const [step, setStep] = useState<ElevatorSteps>({
-    floor: initialFloor,
-    stop: false,
-  });
+const sortAscendant = (a: ElevatorCall, b: ElevatorCall) => {
+  return a.floor - b.floor;
+};
 
+const sortDescendent = (a: ElevatorCall, b: ElevatorCall) => {
+  return b.floor - a.floor;
+};
+const getDirection = (currentFloor: number, nextFloor: number): Direction => {
+  return nextFloor > currentFloor ? "Up" : "Down";
+};
+
+export const useElevatorReact = (floorCount = 6, initialFloor = 0) => {
+  const allFloors = range(floorCount, 5);
+  const timeoutId = useRef<NodeJS.Timeout | null>(null);
+  const [elevatorCalls, setElevatorCalls] = useState<ElevatorCall[]>([]);
   const [currentFloor, setCurrentFloor] = useState<ElevatorSteps>({
     floor: initialFloor,
     stop: false,
   });
-  const [currentDirection, setCurrentDirection] = useState<Direction>();
-  const [elevatorCalls, setElevatorCalls] = useState<ElevatorCall[]>([]);
 
-  let stop: boolean;
+  const getNextStop = (calls: ElevatorCall[], current: ElevatorSteps) => {
+    if (!current.direction) {
+      return calls[0];
+    } else {
+      const ups = calls
+        .filter((call) => call.floor > current.floor)
+        .sort(sortAscendant);
+      const downs = calls
+        .filter((call) => call.floor < current.floor)
+        .sort(sortDescendent);
+
+      console.log("ups", ups);
+      console.log("downs", downs);
+
+      if (current.direction === "Up" || downs.length === 0) {
+        const callsSorted = ups.concat(downs);
+
+        return callsSorted[0];
+      } else if (current.direction === "Down" || ups.length === 0) {
+        const callsSorted = downs.concat(downs);
+
+        return callsSorted[0];
+      }
+    }
+  };
 
   useEffect(() => {
     // Respond to elevator calls
-    findNextStop();
-  }, [elevatorCalls]);
+    if (!elevatorCalls.length) return;
+    if (timeoutId.current) {
+      clearTimeout(timeoutId.current);
+    }
+    timeoutId.current = setTimeout(() => {
+      const nextStop = getNextStop(elevatorCalls, currentFloor);
+      console.log(nextStop);
+      if (!nextStop) return;
 
-  useEffect(() => {
-    findNextStop();
-  }, [step]);
+      const nextStepTemp =
+        nextStop.floor > currentFloor.floor
+          ? currentFloor.floor + 1
+          : currentFloor.floor - 1;
 
-  useTimeout(
-    () => {
-      setStep({ floor: currentFloor.floor, stop: currentFloor.stop });
-      setElevatorCalls(
-        elevatorCalls.filter((c) => c.floor !== currentFloor.floor),
-      );
-    },
-    1000,
-    [currentFloor.floor],
-  );
+      if (nextStepTemp !== nextStop.floor) {
+        console.log("set floor", nextStepTemp);
+        setCurrentFloor({
+          floor: nextStepTemp,
+          direction: getDirection(currentFloor.floor, nextStepTemp),
+          stop: false,
+        });
+      } else {
+        console.log("set floor", nextStop.floor);
+
+        setCurrentFloor({
+          floor: nextStop.floor,
+          direction: getDirection(currentFloor.floor, nextStop.floor),
+          stop: true,
+        });
+
+        const newElevatorCalls = elevatorCalls.filter((call) => {
+          const a = call.floor === nextStop?.floor;
+          const b = call.direction === nextStop?.direction || !call.direction;
+          console.log("a", a);
+          console.log("b", b);
+
+          console.log("call floor", call.floor);
+          console.log("call direction", call.direction);
+          return !(a && b);
+        });
+        console.log("next Stop", nextStop?.floor);
+        console.log("next direction", nextStop?.direction);
+        console.log("elevator calls", elevatorCalls);
+        console.log("new elevator", newElevatorCalls);
+        setElevatorCalls(newElevatorCalls);
+      }
+    }, 1000);
+  }, [currentFloor, elevatorCalls]);
 
   const isFloorCalled = (floor: number) => {
     return elevatorCalls.some((c) => c.floor === floor);
-  };
-
-  const findNextStop = () => {
-    if (!elevatorCalls.length) return;
-
-    const nextStop = findNearest(
-      elevatorCalls,
-      currentFloor.floor,
-      currentDirection,
-    );
-
-    if (nextStop === currentFloor.floor) {
-      setCurrentDirection(currentDirection === "Down" ? "Up" : "Down");
-    }
-
-    if (nextStop !== undefined && nextStop !== currentFloor.floor) {
-      if (currentFloor.floor > nextStop) {
-        setCurrentDirection("Down");
-      } else setCurrentDirection("Up");
-
-      stepsToNextStop(nextStop);
-      //Find nexts steps for the next stop
-    }
-  };
-
-  const stepsToNextStop = (nextStop: number) => {
-    const steps =
-      currentDirection === "Up" || nextStop > currentFloor.floor
-        ? rangeUp(nextStop - currentFloor.floor - 1, currentFloor.floor + 1)
-        : rangeDown(currentFloor.floor - nextStop - 1, currentFloor.floor - 1);
-
-    console.log(steps);
-    if (steps.length) {
-      setCurrentFloor({ floor: steps[0], stop: false });
-    } else {
-      setCurrentFloor({ floor: nextStop, stop: true });
-    }
-  };
-
-  const findNearest = (
-    calls: ElevatorCall[],
-    current: number,
-    direction?: Direction,
-  ) => {
-    let nearest;
-
-    if (!direction) {
-      nearest = closest(
-        calls.map((call) => call.floor),
-        current,
-      );
-    } else if (direction === "Up") {
-      nearest = Math.min(
-        ...calls.map((call) => call.floor).filter((floor) => floor > current),
-      );
-    } else if (direction === "Down") {
-      nearest = Math.max(
-        ...calls.map((call) => call.floor).filter((floor) => floor < current),
-      );
-    }
-    return nearest === -Infinity || nearest === Infinity ? current : nearest;
   };
 
   /**
@@ -141,7 +132,7 @@ export const useElevatorReact = (
    */
   const callDown = (floor: number) => {
     if (isFloorCalled(floor)) return;
-    setElevatorCalls((current) => [...current, { floor, direction: "Up" }]);
+    setElevatorCalls((current) => [...current, { floor, direction: "Down" }]);
   };
 
   /**
@@ -156,9 +147,10 @@ export const useElevatorReact = (
 
   return {
     allFloors,
-    step,
+    step: currentFloor,
     callUp,
     callDown,
     callFloor,
+    elevatorCalls,
   };
 };

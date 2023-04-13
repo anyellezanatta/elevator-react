@@ -1,6 +1,5 @@
-.buildingFlex {
-  display: flex;
+.building {
   flex-direction: column;
-  gap: 2rem;
-  align-items: center;
+  gap: 1rem;
+  /* align-items: center; */
 }
