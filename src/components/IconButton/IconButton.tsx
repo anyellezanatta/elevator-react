@@ -1,6 +1,6 @@
 import { ButtonHTMLAttributes } from "react";
 import { IconKeys, Icons } from "./icons";
-import "./IconButton.css";
+import "./iconButton.css";
 import classNames from "classnames";
 
 export type IconButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {

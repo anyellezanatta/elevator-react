@@ -1,19 +1,23 @@
 import { MouseEventHandler } from "react";
-import { Elevator } from "../Elevator";
 import { IconButton } from "../IconButton";
-import "./Floor.css";
+import "./floor.css";
+import classNames from "classnames";
 
 export const Floor = ({
   floorNumber,
-  elevator = false,
+  isElevator,
+  isCalled,
+  isUp,
+  isDown,
   onClickUp,
   onClickDown,
   callFloor,
-  allFloor,
 }: {
-  allFloor: number[];
   floorNumber: number;
-  elevator?: boolean;
+  isElevator: boolean;
+  isCalled: boolean;
+  isUp: boolean;
+  isDown: boolean;
   onClickUp: MouseEventHandler<HTMLButtonElement>;
   onClickDown: MouseEventHandler<HTMLButtonElement>;
   callFloor: (floor: number) => void;
@@ -21,15 +25,25 @@ export const Floor = ({
   return (
     <div className="flex floor">
       <div className="flex direction-buttons">
-        <IconButton icon="ArrowUp" onClick={onClickUp} />
-        <IconButton icon="ArrowDown" onClick={onClickDown} />
+        <IconButton
+          className={classNames({ "call-signal": isUp })}
+          icon="ArrowUp"
+          onClick={onClickUp}
+        />
+        <IconButton
+          className={classNames({ "call-signal": isDown })}
+          icon="ArrowDown"
+          onClick={onClickDown}
+        />
       </div>
-      <div className="flex floor-elevator">
-        <h1>{floorNumber}</h1>
-        {elevator ? (
-          <Elevator allFloor={allFloor} callFloor={callFloor}></Elevator>
-        ) : null}
-      </div>
+      <button
+        className={classNames("floor-elevator", {
+          "call-signal": isCalled,
+          elevator: isElevator,
+        })}
+        onClick={() => callFloor(floorNumber)}>
+        {floorNumber}
+      </button>
     </div>
   );
 };

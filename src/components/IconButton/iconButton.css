@@ -1,6 +1,5 @@
 .icon-button {
   background-color: transparent;
-  /* background-size: cover; */
   cursor: pointer;
   padding: 0;
   display: flex;
@@ -10,6 +9,8 @@
 }
 
 .svg-icon {
+  /* fill: hsl(var(--clr-border)); */
+  fill: #ff8e3d;
   top: 0.125em;
   flex-shrink: 0;
 }

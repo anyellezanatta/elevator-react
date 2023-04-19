@@ -1,37 +1,34 @@
 import { useElevatorReact } from "@/hooks/useElevatorReact";
 import { Floor } from "../Floor";
-import "./Building.css";
+import "./building.css";
 
 export const Building = () => {
-  const { allFloors, step, callUp, callDown, callFloor } = useElevatorReact();
+  const { allFloors, step, callUp, callDown, callFloor, elevatorCalls } =
+    useElevatorReact();
   return (
     <div className="flex building">
       {allFloors.map((floor) => {
-        if (step.floor === floor) {
-          return (
-            <div key={floor}>
-              <Floor
-                key={floor}
-                allFloor={allFloors}
-                floorNumber={floor}
-                elevator
-                onClickDown={() => callDown(floor)}
-                onClickUp={() => callUp(floor)}
-                callFloor={callFloor}></Floor>
-
-              {step.stop ? `stop ${step.stop}` : null}
-            </div>
-          );
-        } else
-          return (
+        const elevatorCall = elevatorCalls.find((elevatorCall) => {
+          return elevatorCall.floor === floor;
+        });
+        return (
+          <div key={floor}>
             <Floor
               key={floor}
               floorNumber={floor}
-              allFloor={allFloors}
+              isElevator={step.floor === floor}
+              isCalled={
+                elevatorCall && elevatorCall.direction === undefined
+                  ? true
+                  : false
+              }
+              isUp={elevatorCall ? elevatorCall.direction === "Up" : false}
+              isDown={elevatorCall ? elevatorCall.direction === "Down" : false}
               onClickDown={() => callDown(floor)}
               onClickUp={() => callUp(floor)}
               callFloor={callFloor}></Floor>
-          );
+          </div>
+        );
       })}
     </div>
   );

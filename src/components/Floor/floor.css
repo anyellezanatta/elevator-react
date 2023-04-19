@@ -2,21 +2,27 @@
   width: 15rem;
 }
 
-.floor-elevator {
-  flex-direction: row;
-  flex: 1;
-  align-items: center;
-  justify-content: center;
-  gap: 0.25rem;
-  padding: 1rem;
-  border: 2px solid;
-  border-color: hsl(--clr-dark);
-  background-color: hsl(43 12% 60%);
-}
-
 .direction-buttons {
-  --gap: 0.25rem;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+
+.floor-elevator {
+  flex: 1;
+  padding: 1rem;
+  border: 2px solid;
+  border-color: hsl(var(--clr-dark));
+  background-color: hsl(var(--clr-primary));
+  color: hsl(var(--clr-border));
+  cursor: pointer;
+}
+
+.call-signal {
+  background-color: hsl(var(--clr-selection));
+}
+
+.elevator {
+  background-color: hsl(var(--clr-dark));
+  color: hsl(var(--clr-background));
 }
