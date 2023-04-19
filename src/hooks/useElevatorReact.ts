@@ -88,16 +88,12 @@ export const useElevatorReact = (floorCount = 6, initialFloor = 0) => {
     }
     timeoutId.current = setTimeout(() => {
       const nextStop = getNextStop(elevatorCalls, currentFloor);
-      console.log("nextStop", nextStop);
-      console.log("currentFloor", currentFloor);
       if (!nextStop) return;
 
       const nextStepTemp =
         nextStop.floor > currentFloor.floor
           ? currentFloor.floor + 1
           : currentFloor.floor - 1;
-
-      console.log("nextStepTemp", nextStepTemp);
 
       if (
         nextStepTemp === nextStop.floor &&
@@ -109,8 +105,6 @@ export const useElevatorReact = (floorCount = 6, initialFloor = 0) => {
             currentFloor.direction || "Up",
           ))
       ) {
-        console.log("set floor true", nextStop.floor);
-
         setCurrentFloor({
           floor: nextStop.floor,
           direction: getDirection(currentFloor, nextStop),
@@ -122,8 +116,6 @@ export const useElevatorReact = (floorCount = 6, initialFloor = 0) => {
 
         setElevatorCalls(newElevatorCalls);
       } else {
-        console.log("set floor false", nextStepTemp);
-
         setCurrentFloor({
           floor: nextStepTemp,
           direction: getDirection(currentFloor, nextStop),

@@ -1,7 +1,7 @@
 import { ButtonHTMLAttributes } from "react";
 import { IconKeys, Icons } from "./icons";
-import "./iconButton.css";
 import classNames from "classnames";
+import "./icon-button.css";
 
 export type IconButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   icon: IconKeys;
@@ -14,7 +14,7 @@ export const IconButton = ({
 }: IconButtonProps) => {
   const Icon = Icons[icon];
 
-  const btnClass = classNames("icon-button", {
+  const btnClass = classNames("flex", "icon-button", {
     [className]: !!className,
   });
 

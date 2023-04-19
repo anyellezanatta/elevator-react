@@ -28,11 +28,13 @@ export const Floor = ({
         <IconButton
           className={classNames({ "call-signal": isUp })}
           icon="ArrowUp"
+          aria-label="Up"
           onClick={onClickUp}
         />
         <IconButton
           className={classNames({ "call-signal": isDown })}
           icon="ArrowDown"
+          aria-label="Down"
           onClick={onClickDown}
         />
       </div>
@@ -41,7 +43,8 @@ export const Floor = ({
           "call-signal": isCalled,
           elevator: isElevator,
         })}
-        onClick={() => callFloor(floorNumber)}>
+        onClick={() => callFloor(floorNumber)}
+        aria-label={`floor ${floorNumber}`}>
         {floorNumber}
       </button>
     </div>
