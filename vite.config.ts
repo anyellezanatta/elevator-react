@@ -9,4 +9,5 @@ export default defineConfig({
     alias: [{ find: "@", replacement: "/src" }],
   },
   plugins: [react(), svgr()],
+  base: "/elevator-react",
 });
