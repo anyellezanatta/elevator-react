@@ -1,5 +1,5 @@
 .floor {
-  width: 15rem;
+  min-width: 15rem;
 }
 
 .direction-buttons {
@@ -15,7 +15,14 @@
   border-color: hsl(var(--clr-dark));
   background-color: hsl(var(--clr-primary));
   color: hsl(var(--clr-border));
+}
+
+.active {
   cursor: pointer;
+}
+
+.active:hover {
+  background-color: hsl(var(--clr-primary) / 50%);
 }
 
 .call-signal {

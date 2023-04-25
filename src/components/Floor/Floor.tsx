@@ -1,11 +1,11 @@
 import { MouseEventHandler } from "react";
-import { IconButton } from "../IconButton";
-import "./floor.css";
 import classNames from "classnames";
+import { IconButton } from "@/components/IconButton";
+import "./floor.css";
 
 export const Floor = ({
   floorNumber,
-  isElevator,
+  isElevatorPresent,
   isCalled,
   isUp,
   isDown,
@@ -14,7 +14,7 @@ export const Floor = ({
   callFloor,
 }: {
   floorNumber: number;
-  isElevator: boolean;
+  isElevatorPresent: boolean;
   isCalled: boolean;
   isUp: boolean;
   isDown: boolean;
@@ -26,24 +26,25 @@ export const Floor = ({
     <div className="flex floor">
       <div className="flex direction-buttons">
         <IconButton
-          className={classNames({ "call-signal": isUp })}
           icon="ArrowUp"
           aria-label="Up"
-          onClick={onClickUp}
+          aria-pressed={isUp}
+          onClick={!isElevatorPresent && !isUp ? onClickUp : undefined}
         />
         <IconButton
-          className={classNames({ "call-signal": isDown })}
           icon="ArrowDown"
           aria-label="Down"
-          onClick={onClickDown}
+          aria-pressed={isDown}
+          onClick={!isElevatorPresent && !isDown ? onClickDown : undefined}
         />
       </div>
       <button
         className={classNames("floor-elevator", {
           "call-signal": isCalled,
-          elevator: isElevator,
+          active: !isCalled && !isElevatorPresent,
+          elevator: isElevatorPresent,
         })}
-        onClick={() => callFloor(floorNumber)}
+        onClick={!isElevatorPresent ? () => callFloor(floorNumber) : undefined}
         aria-label={`floor ${floorNumber}`}>
         {floorNumber}
       </button>

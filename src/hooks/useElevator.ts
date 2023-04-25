@@ -1,84 +1,72 @@
-import { range } from "@/lib/utils";
 import { useEffect, useRef, useState } from "react";
+import { range, removeBy, sortBy } from "@/lib/utils";
 
 type Direction = "Up" | "Down";
 
-type ElevatorCall = {
-  floor: number;
-  direction?: Direction;
-};
 type ElevatorSteps = {
   floor: number;
   direction?: Direction;
 };
 
-const sortAscending = (a: ElevatorCall, b: ElevatorCall) => {
-  return a.floor - b.floor;
-};
-
-const sortDescending = (a: ElevatorCall, b: ElevatorCall) => {
-  return b.floor - a.floor;
-};
-const existNextCallSameDirection = (
-  calls: ElevatorCall[],
+const isNextCallGoingToSameDirection = (
+  calls: ElevatorSteps[],
   nextFloor: ElevatorSteps,
   currentDirection: Direction,
-) => {
+): boolean => {
   const callUndefined = calls.filter((call) => {
     return (
       call.direction === undefined &&
-      (currentDirection === "Up"
-        ? call.floor > nextFloor.floor
-        : call.floor < nextFloor.floor)
+      (currentDirection === "Up" ? call.floor > nextFloor.floor : call.floor < nextFloor.floor)
     );
   });
 
   const callDirection = calls.filter((call) => {
-    return currentDirection === "Up"
-      ? call.floor > nextFloor.floor
-      : call.floor < nextFloor.floor;
+    return currentDirection === "Up" ? call.floor > nextFloor.floor : call.floor < nextFloor.floor;
   });
 
-  return callDirection.length || callUndefined.length;
+  return !!callDirection.length || !!callUndefined.length;
 };
-const getDirection = (
-  currentFloor: ElevatorSteps,
-  nextFloor: ElevatorSteps,
-): Direction | undefined => {
+
+const getDirection = (currentFloor: ElevatorSteps, nextFloor: ElevatorSteps): Direction => {
   return nextFloor.floor > currentFloor.floor ? "Up" : "Down";
 };
 
-export const useElevatorReact = (floorCount = 6, initialFloor = 0) => {
+const getNextStop = (calls: ElevatorSteps[], current: ElevatorSteps) => {
+  if (!current.direction) {
+    return calls[0];
+  } else {
+    const ups = sortBy(
+      calls.filter((call) => call.floor > current.floor),
+      "floor",
+      "ascending",
+    );
+
+    const downs = sortBy(
+      calls.filter((call) => call.floor < current.floor),
+      "floor",
+      "descending",
+    );
+
+    if (current.direction === "Up") {
+      const callsSorted = ups.concat(downs);
+
+      return callsSorted[0];
+    } else if (current.direction === "Down") {
+      const callsSorted = downs.concat(ups);
+
+      return callsSorted[0];
+    }
+  }
+};
+
+export const useElevator = (floorCount = 6, initialFloor = 0, delay = 1000) => {
   const allFloors = range(floorCount, 5);
   const timeoutId = useRef<NodeJS.Timeout | null>(null);
-  const [elevatorCalls, setElevatorCalls] = useState<ElevatorCall[]>([]);
+  const [elevatorCalls, setElevatorCalls] = useState<ElevatorSteps[]>([]);
   const [currentFloor, setCurrentFloor] = useState<ElevatorSteps>({
     floor: initialFloor,
     direction: "Up",
   });
-
-  const getNextStop = (calls: ElevatorCall[], current: ElevatorSteps) => {
-    if (!current.direction) {
-      return calls[0];
-    } else {
-      const ups = calls
-        .filter((call) => call.floor > current.floor)
-        .sort(sortAscending);
-      const downs = calls
-        .filter((call) => call.floor < current.floor)
-        .sort(sortDescending);
-
-      if (current.direction === "Up") {
-        const callsSorted = ups.concat(downs);
-
-        return callsSorted[0];
-      } else if (current.direction === "Down") {
-        const callsSorted = downs.concat(ups);
-
-        return callsSorted[0];
-      }
-    }
-  };
 
   useEffect(() => {
     // Respond to elevator calls
@@ -91,28 +79,20 @@ export const useElevatorReact = (floorCount = 6, initialFloor = 0) => {
       if (!nextStop) return;
 
       const nextStepTemp =
-        nextStop.floor > currentFloor.floor
-          ? currentFloor.floor + 1
-          : currentFloor.floor - 1;
+        nextStop.floor > currentFloor.floor ? currentFloor.floor + 1 : currentFloor.floor - 1;
 
       if (
         nextStepTemp === nextStop.floor &&
         (nextStop.direction === currentFloor.direction ||
           nextStop.direction === undefined ||
-          !existNextCallSameDirection(
-            elevatorCalls,
-            nextStop,
-            currentFloor.direction || "Up",
-          ))
+          !isNextCallGoingToSameDirection(elevatorCalls, nextStop, currentFloor.direction || "Up"))
       ) {
         setCurrentFloor({
           floor: nextStop.floor,
           direction: getDirection(currentFloor, nextStop),
         });
 
-        const newElevatorCalls = elevatorCalls.filter((call) => {
-          return call.floor !== nextStop.floor;
-        });
+        const newElevatorCalls = removeBy(elevatorCalls, "floor", nextStop.floor);
 
         setElevatorCalls(newElevatorCalls);
       } else {
@@ -121,8 +101,8 @@ export const useElevatorReact = (floorCount = 6, initialFloor = 0) => {
           direction: getDirection(currentFloor, nextStop),
         });
       }
-    }, 1000);
-  }, [currentFloor, elevatorCalls, floorCount, initialFloor]);
+    }, delay);
+  }, [currentFloor, delay, elevatorCalls]);
 
   const isFloorCalled = (floor: number) => {
     return elevatorCalls.some((c) => c.floor === floor);

@@ -1,17 +1,13 @@
 import { ButtonHTMLAttributes } from "react";
-import { IconKeys, Icons } from "./icons";
 import classNames from "classnames";
+import { IconKeys, Icons } from "./icons";
 import "./icon-button.css";
 
 export type IconButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   icon: IconKeys;
 };
 
-export const IconButton = ({
-  icon,
-  className = "",
-  ...props
-}: IconButtonProps) => {
+export const IconButton = ({ icon, className = "", ...props }: IconButtonProps) => {
   const Icon = Icons[icon];
 
   const btnClass = classNames("flex", "icon-button", {
@@ -20,7 +16,7 @@ export const IconButton = ({
 
   return (
     <button className={btnClass} {...props}>
-      <Icon className="svg-icon" fill="black" />
+      <Icon className="svg-icon" />
     </button>
   );
 };

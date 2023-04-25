@@ -7,9 +7,15 @@
   background-color: transparent;
 }
 
-.svg-icon {
-  /* fill: hsl(var(--clr-border)); */
-  fill: #ff8e3d;
-  top: 0.125em;
-  flex-shrink: 0;
+.svg-icon > path {
+  stroke: hsl(var(--clr-contrast));
+}
+
+[aria-pressed="true"] > .svg-icon {
+  fill: hsl(var(--clr-contrast));
+  cursor: auto;
+}
+
+[aria-pressed="false"] > .svg-icon:hover {
+  fill: hsl(var(--clr-contrast) / 50%);
 }
