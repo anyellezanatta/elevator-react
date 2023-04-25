@@ -1,0 +1,21 @@
+.icon-button {
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  border: 0;
+  cursor: pointer;
+  background-color: transparent;
+}
+
+.svg-icon > path {
+  stroke: hsl(var(--clr-contrast));
+}
+
+[aria-pressed="true"] > .svg-icon {
+  fill: hsl(var(--clr-contrast));
+  cursor: auto;
+}
+
+[aria-pressed="false"] > .svg-icon:hover {
+  fill: hsl(var(--clr-contrast) / 50%);
+}

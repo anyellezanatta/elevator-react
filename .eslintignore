@@ -1,0 +1,5 @@
+**/*.cjs
+src/assets
+.yarn
+.vscode
+public
