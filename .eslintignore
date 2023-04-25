@@ -1,5 +1,9 @@
-**/*.cjs
-src/assets
 .yarn
+.github
 .vscode
 public
+build
+coverage
+dist
+src/assets
+**/*.cjs
