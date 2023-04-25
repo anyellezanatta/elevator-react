@@ -1,4 +1,4 @@
-export const range = (size: number, start = 0) => {
+export const rangeDesc = (size: number, start = 0) => {
   return [...Array(size).keys()].map((i) => start - i);
 };
 
