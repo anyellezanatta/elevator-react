@@ -3,6 +3,8 @@
 This is a Vite React project that simulates the behavior of an elevator.
 The elevator logic is fully implements using the hooks.
 
+[![Deploy static content to Pages](https://github.com/anyellezanatta/elevator-react/actions/workflows/deploy.yml/badge.svg)](https://github.com/anyellezanatta/elevator-react/actions/workflows/deploy.yml)
+
 ## Stack
 
 - React 18
