@@ -1,4 +1,5 @@
-import { rangeDesc, removeBy } from "./utils";
+import { Agent } from "http";
+import { rangeDesc, removeBy, sortBy } from "./utils";
 
 describe("utils", () => {
   describe("rangeDesc", () => {
@@ -34,6 +35,26 @@ describe("utils", () => {
       const actual = removeBy(items, "name", "Peter");
 
       expect(actual).toStrictEqual(items);
+    });
+  });
+
+  describe("sortBy", () => {
+    it("should sort the item ascending", () => {
+      const expected = [{ age: 10 }, { age: 12 }, { age: 12 }, { age: 15 }];
+      const items = [{ age: 12 }, { age: 15 }, { age: 10 }, { age: 12 }];
+
+      const actual = sortBy(items, "age", "ascending");
+
+      expect(actual).toStrictEqual(expected);
+    });
+
+    it("should sort the item descending", () => {
+      const expected = [{ age: 28 }, { age: 26 }, { age: 23 }];
+      const items = [{ age: 26 }, { age: 28 }, { age: 23 }];
+
+      const actual = sortBy(items, "age", "descending");
+
+      expect(actual).toStrictEqual(expected);
     });
   });
 });
