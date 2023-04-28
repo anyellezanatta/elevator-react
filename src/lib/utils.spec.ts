@@ -1,4 +1,3 @@
-import { Agent } from "http";
 import { rangeDesc, removeBy, sortBy } from "./utils";
 
 describe("utils", () => {

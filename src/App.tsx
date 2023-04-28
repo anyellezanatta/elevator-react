@@ -1,5 +1,5 @@
-import "./App.css";
 import { Building } from "@/components/Building";
+import "./App.css";
 
 function App() {
   return (

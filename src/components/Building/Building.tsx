@@ -3,7 +3,7 @@ import { Floor } from "@/components/Floor";
 import "./building.css";
 
 export const Building = () => {
-  const { allFloors, step, callUp, callDown, callFloor, elevatorCalls } = useElevator();
+  const { allFloors, step, callUp, callDown, callFloor, elevatorCalls } = useElevator(6);
   return (
     <div className="flex building">
       {allFloors.map((floor) => {
