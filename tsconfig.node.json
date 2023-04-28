@@ -12,5 +12,5 @@
       "rootDir": "."
     }
   },
-  "include": ["vite.config.ts", "test-setup"]
+  "include": ["vite.config.ts"]
 }
