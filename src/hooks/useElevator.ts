@@ -60,7 +60,7 @@ const getNextStop = (calls: ElevatorSteps[], current: ElevatorSteps) => {
 };
 
 export const useElevator = (floorCount: number, initialFloor = 0, delay = 1000) => {
-  const allFloors = rangeDesc(floorCount, 5);
+  const allFloors = rangeDesc(floorCount);
   const timeoutId = useRef<NodeJS.Timeout | null>(null);
   const [elevatorCalls, setElevatorCalls] = useState<ElevatorSteps[]>([]);
   const [currentFloor, setCurrentFloor] = useState<ElevatorSteps>({

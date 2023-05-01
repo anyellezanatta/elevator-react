@@ -1,4 +1,3 @@
-import { MouseEventHandler } from "react";
 import classNames from "classnames";
 import { IconButton } from "@/components/IconButton";
 import "./floor.css";
