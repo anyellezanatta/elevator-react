@@ -11,7 +11,7 @@
 .floor-elevator {
   flex: 1;
   padding: 1rem;
-  border: 2px solid;
+  border-bottom: 2px solid;
   border-color: hsl(var(--clr-dark));
   background-color: hsl(var(--clr-primary));
   color: hsl(var(--clr-border));

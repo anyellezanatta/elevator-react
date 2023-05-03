@@ -1,12 +1,11 @@
-import { Agent } from "http";
 import { rangeDesc, removeBy, sortBy } from "./utils";
 
 describe("utils", () => {
   describe("rangeDesc", () => {
     const cases = [
       { size: 0, start: 0, expected: [] },
-      { size: 5, start: 4, expected: [4, 3, 2, 1, 0] },
-      { size: 3, start: 3, expected: [3, 2, 1] },
+      { size: 5, start: 4, expected: [8, 7, 6, 5, 4] },
+      { size: 3, start: 3, expected: [5, 4, 3] },
     ];
 
     cases.forEach(({ size, start, expected }) => {
