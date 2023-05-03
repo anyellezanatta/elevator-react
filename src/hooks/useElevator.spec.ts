@@ -2,11 +2,6 @@ import { renderHook, act } from "@testing-library/react-hooks";
 import { useElevator } from "./useElevator";
 
 describe("useElevator", () => {
-  // beforeEach(() => {
-  //   jest.useFakeTimers();
-  //   jest.spyOn(global, "setTimeout");
-  // });
-
   it("should go to the first floor", async () => {
     const { result, waitForValueToChange } = renderHook(() => useElevator(2, 0, 50));
 

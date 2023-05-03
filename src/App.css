@@ -1,12 +1,5 @@
 /* Custom properties   */
 
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
-}
-
 :root {
   /* colors */
   --clr-background: 46 32% 92%;
@@ -14,7 +7,7 @@
   --clr-border: 40 5% 12%;
   --clr-selection: 190 13% 63%;
   --clr-dark: 207 12% 34%;
-  --clr-contrast: 25 100% 62%;
+  --clr-contrast: 11 83% 49%;
 
   /* font-sizes */
   --fs-900: clamp(5rem, 8vw + 1rem, 9.375rem);
@@ -88,6 +81,7 @@ button,
 textarea,
 select {
   font: inherit;
+  border: 0;
 }
 
 /* remove animations for people who've turned them off */
@@ -108,5 +102,10 @@ select {
 
 .flex {
   display: flex;
-  gap: var(--gap, 1rem);
+}
+
+.app {
+  margin: 2rem auto;
+  max-width: min(40rem, calc(100% - 2rem));
+  text-align: center;
 }
